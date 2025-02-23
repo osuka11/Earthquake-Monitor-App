@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/magnitude_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            tools:text="8.0">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            tools:text="Tecomán, Colima, Mx"
+            android:textSize="16sp"
+            android:layout_toEndOf="@id/magnitude_text"
+            android:layout_centerHorizontal="true">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/arrow_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/location_text"
+            android:background="@drawable/baseline_arrow_forward_ios_24">
+
+        </ImageView>
+
+    </RelativeLayout>
+</layout>
