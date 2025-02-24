@@ -9,4 +9,6 @@
     <string name="ritcher">Ritcher</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude\n</string>
+    <string name="sort_by_time">Sort by time</string>
+    <string name="sort_by_magnitude">Sort by Magnitude</string>
 </resources>
