@@ -16,6 +16,7 @@ room = "2.6.1"
 ksp-room = "2.6.1"
 retrofit = "2.11.0"
 moshi = "1.12.0"
+parcelize = "1.8.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,8 @@ ksp-moshi = {group="com.squareup.moshi", name = "moshi-kotlin-codegen", version.
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp-devtools = {id = "com.google.devtools.ksp", version.ref = "ksp"}
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "parcelize"  }
+
 
 
 

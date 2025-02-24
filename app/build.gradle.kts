@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp.devtools)
+    alias(libs.plugins.kotlin.parcelize)
+
 }
 
 android {
@@ -53,8 +55,6 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.builder)
     ksp(libs.ksp.moshi)
-
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

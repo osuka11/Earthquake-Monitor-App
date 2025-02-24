@@ -2,4 +2,11 @@
     <string name="app_name">Earthquake_App</string>
     <string name="no_items_on_the_list">no-items-in-the-list\n</string>
     <string name="magnitude_format">%.2f</string>
+    <string name="latitude_format">%.3f</string>
+
+    <string name="longitude_format">%.3f</string>
+
+    <string name="ritcher">Ritcher</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude\n</string>
 </resources>
