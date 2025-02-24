@@ -1,11 +1,13 @@
 package com.example.earthquake_app.main
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.earthquake_app.Earthquake
+import com.example.earthquake_app.R
 import com.example.earthquake_app.databinding.EqListItemBinding
 
 class EqAdapter() :androidx.recyclerview.widget.ListAdapter<Earthquake,EqAdapter.ViewHolder>(DiffCallBack) {
@@ -26,7 +28,7 @@ class EqAdapter() :androidx.recyclerview.widget.ListAdapter<Earthquake,EqAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EqAdapter.ViewHolder {
         val binding = EqListItemBinding.inflate(LayoutInflater.from(parent.context))
-        return ViewHolder(binding)
+        return ViewHolder(binding, parent.context)
 
     }
 
@@ -36,10 +38,10 @@ class EqAdapter() :androidx.recyclerview.widget.ListAdapter<Earthquake,EqAdapter
 
     }
 
-    inner class ViewHolder(private val binding: EqListItemBinding):RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: EqListItemBinding, parent: Context):RecyclerView.ViewHolder(binding.root){
+        private val resources = parent
         fun bind(earthquake: Earthquake){
-            //binding.magnitudeText.text = earthquake.magnitude.toString()
-            binding.magnitudeText.text =  earthquake.magnitude.toString()
+            binding.magnitudeText.text = resources.getString(R.string.magnitude_format,earthquake.magnitude)
             binding.locationText.text = earthquake.place
             binding.root.setOnClickListener {
                 if(::onItemClickListener.isInitialized){

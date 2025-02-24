@@ -11,19 +11,21 @@ import com.example.earthquake_app.Earthquake
 abstract class EqDatabase:RoomDatabase(){
     abstract val eqDao: EqDao
 
-    private lateinit var INSTANCE: EqDatabase
 
-    fun getDatabase(context: Context): EqDatabase{
-        synchronized(EqDatabase::class.java){
-            if(!::INSTANCE.isInitialized){
-                INSTANCE = Room.databaseBuilder(
-                    context.applicationContext,
-                    EqDatabase::class.java,
-                    "earthquake_db"
-                ).build()
-            }
-            return INSTANCE
+
+
+}
+private lateinit var INSTANCE: EqDatabase
+
+fun getDatabase(context: Context): EqDatabase{
+    synchronized(EqDatabase::class.java){
+        if(!::INSTANCE.isInitialized){
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
+                EqDatabase::class.java,
+                "earthquake_db"
+            ).build()
         }
+        return INSTANCE
     }
-
 }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.earthquake_app.Earthquake
+import com.example.earthquake_app.api.ApiResponseStatus
 import com.example.earthquake_app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,11 +20,20 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = EqAdapter()
         eqRecycler.adapter = adapter
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val viewModel = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
+
         viewModel.eqList.observe(this) { eqList ->
             adapter.submitList(eqList)
             handleEmptyView(eqList, binding)
 
+        }
+        viewModel.status.observe(this) {
+            apiResponseStatus ->
+            when (apiResponseStatus) {
+                ApiResponseStatus.LOADING -> binding.progressBar.visibility = View.VISIBLE
+                ApiResponseStatus.DONE -> binding.progressBar.visibility = View.GONE
+                ApiResponseStatus.ERROR -> binding.progressBar.visibility = View.GONE
+            }
         }
         adapter.onItemClickListener = {
             Toast.makeText(this,it.place,Toast.LENGTH_SHORT).show()
