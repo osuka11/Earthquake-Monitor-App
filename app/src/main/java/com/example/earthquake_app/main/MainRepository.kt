@@ -11,7 +11,10 @@ class MainRepository {
     suspend fun fetchEarthquakes():MutableList<Earthquake> {
         return withContext(Dispatchers.IO){
             val eqJsonResponse = service.getLastHourEarthquakes()
+
             val eqList = parseEqResult(eqJsonResponse)
+            //val json = jsonAdapter.toJson(eqJsonResponse)
+
             eqList
         }
 

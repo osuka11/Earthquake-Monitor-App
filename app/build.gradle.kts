@@ -51,6 +51,10 @@ dependencies {
     ksp(libs.ksp.room)
     implementation(libs.retrofit)
     implementation(libs.moshi)
+    implementation(libs.moshi.builder)
+    ksp(libs.ksp.moshi)
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
