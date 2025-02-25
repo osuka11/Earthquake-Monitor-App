@@ -1,6 +1,5 @@
 package com.example.earthquake_app.main
 
-import androidx.lifecycle.LiveData
 import com.example.earthquake_app.Earthquake
 import com.example.earthquake_app.api.EqJsonResponse
 import com.example.earthquake_app.api.service
@@ -10,17 +9,25 @@ import kotlinx.coroutines.withContext
 
 class MainRepository(private val database: EqDatabase) {
 
-    val eqList: LiveData<MutableList<Earthquake>> = database.eqDao.getAllEarthquake()
+    //val eqList: LiveData<MutableList<Earthquake>> = database.eqDao.getAllEarthquake()
 
-    suspend fun fetchEarthquakes() {
+    suspend fun fetchEarthquakes(sortByMagnitude:Boolean):MutableList<Earthquake> {
         return withContext(Dispatchers.IO){
             val eqJsonResponse = service.getLastHourEarthquakes()
-
             val eqList = parseEqResult(eqJsonResponse)
             //val json = jsonAdapter.toJson(eqJsonResponse)
             database.eqDao.insertAll(eqList)
-            val earthquakes = database.eqDao.getAllEarthquake()
+            getEarthquakesbyDataBase(sortByMagnitude)
 
+        }
+    }
+    suspend fun getEarthquakesbyDataBase(sortByMagnitude: Boolean):MutableList<Earthquake>{
+        return withContext(Dispatchers.IO){
+            if(sortByMagnitude){
+                database.eqDao.getEarthquakesByMagnitude()
+            }else{
+                database.eqDao.getAllEarthquake()
+            }
         }
 
     }

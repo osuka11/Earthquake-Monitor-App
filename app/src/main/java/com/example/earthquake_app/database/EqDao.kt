@@ -12,5 +12,8 @@ interface EqDao {
     fun insertAll(eqList:MutableList<Earthquake>)
 
     @Query("SELECT * FROM earthquakes")
-    fun getAllEarthquake():LiveData<MutableList<Earthquake>>
+    fun getAllEarthquake():MutableList<Earthquake>
+
+    @Query("SELECT * FROM earthquakes ORDER BY magnitude ASC")
+    fun getEarthquakesByMagnitude():MutableList<Earthquake>
 }

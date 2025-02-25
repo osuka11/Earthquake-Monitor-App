@@ -16,12 +16,14 @@ import java.net.UnknownHostException
 private val TAG = MainViewModel::class.java.simpleName
 
 class MainViewModel(application: Application):AndroidViewModel(application) {
-    /*
+
+
+
     private var _eqList= MutableLiveData<MutableList<Earthquake>>()
     val eqList: LiveData<MutableList<Earthquake>>
         get() = _eqList
 
-     */
+
     /*
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
@@ -33,19 +35,35 @@ class MainViewModel(application: Application):AndroidViewModel(application) {
     private val database = getDatabase(application.applicationContext)
     private val repository = MainRepository(database)
 
-    val eqList = repository.eqList
 
     init {
+        reloadEarthquakes()
+    }
+
+    private fun reloadEarthquakes() {
         viewModelScope.launch {
             try {
                 _status.value = ApiResponseStatus.LOADING
-                repository.fetchEarthquakes()
+                _eqList.value = repository.fetchEarthquakes(false)
                 _status.value = ApiResponseStatus.DONE
 
             }catch (error:UnknownHostException){
                 _status.value = ApiResponseStatus.ERROR
                 Log.d(TAG, "No internet Connection")
             }
+
+        }
+    }
+    fun reloadEarthquakesByDatabase(sortByMagnitude: Boolean){
+        viewModelScope.launch {
+            try {
+                _eqList.value = repository.getEarthquakesbyDataBase(sortByMagnitude)
+
+            }catch (error:UnknownHostException){
+                _status.value = ApiResponseStatus.ERROR
+                Log.d(TAG, "No internet Connection")
+            }
+
         }
 
     }

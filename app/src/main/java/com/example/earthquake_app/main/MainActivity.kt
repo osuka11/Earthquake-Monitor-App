@@ -3,16 +3,21 @@ package com.example.earthquake_app.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.earthquake_app.DetailActivity
 import com.example.earthquake_app.Earthquake
+import com.example.earthquake_app.R
 import com.example.earthquake_app.api.ApiResponseStatus
 import com.example.earthquake_app.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = EqAdapter()
         eqRecycler.adapter = adapter
-        val viewModel = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(application))[MainViewModel::class.java]
 
         viewModel.eqList.observe(this) { eqList ->
             adapter.submitList(eqList)
@@ -43,11 +48,7 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-
-
-
     }
-
     private fun openDetailActivity(earthquake: Earthquake) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EARTHQUAKE, earthquake)
@@ -63,5 +64,19 @@ class MainActivity : AppCompatActivity() {
             binding.emptyView.visibility = View.GONE
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        when(itemId){
+            R.id.main_menu_sort_time -> viewModel.reloadEarthquakesByDatabase(false )
+            R.id.main_menu_sort_magnitude -> viewModel.reloadEarthquakesByDatabase(true)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
