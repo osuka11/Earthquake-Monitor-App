@@ -15,7 +15,7 @@ import java.net.UnknownHostException
 
 private val TAG = MainViewModel::class.java.simpleName
 
-class MainViewModel(application: Application):AndroidViewModel(application) {
+class MainViewModel(application: Application, sortType:Boolean):AndroidViewModel(application) {
 
 
 
@@ -37,14 +37,14 @@ class MainViewModel(application: Application):AndroidViewModel(application) {
 
 
     init {
-        reloadEarthquakes()
+        reloadEarthquakes(sortType)
     }
 
-    private fun reloadEarthquakes() {
+    private fun reloadEarthquakes(sortByMagnitude: Boolean) {
         viewModelScope.launch {
             try {
                 _status.value = ApiResponseStatus.LOADING
-                _eqList.value = repository.fetchEarthquakes(false)
+                _eqList.value = repository.fetchEarthquakes(sortByMagnitude)
                 _status.value = ApiResponseStatus.DONE
 
             }catch (error:UnknownHostException){
@@ -58,6 +58,7 @@ class MainViewModel(application: Application):AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 _eqList.value = repository.getEarthquakesbyDataBase(sortByMagnitude)
+               // _eqList.value!!.sortByDescending { it.magnitude }
 
             }catch (error:UnknownHostException){
                 _status.value = ApiResponseStatus.ERROR

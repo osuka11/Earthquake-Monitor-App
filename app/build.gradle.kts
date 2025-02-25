@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.builder)
     ksp(libs.ksp.moshi)
+    implementation(libs.work.manager)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

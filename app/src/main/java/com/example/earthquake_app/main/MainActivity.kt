@@ -17,6 +17,10 @@ import com.example.earthquake_app.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    companion object{
+        const val SORT_TYPE = "sort_type"
+        const val EQ_APP_PREFERENCES = "earthquake_preferences"
+    }
     private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = EqAdapter()
         eqRecycler.adapter = adapter
-        viewModel = ViewModelProvider(this, MainViewModelFactory(application))[MainViewModel::class.java]
+        val prefs = getPreferences(MODE_PRIVATE).getBoolean(SORT_TYPE,false)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(application, prefs))[MainViewModel::class.java]
 
         viewModel.eqList.observe(this) { eqList ->
             adapter.submitList(eqList)
@@ -66,6 +71,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveSortType(sortByMagnitude:Boolean){
+        val prefs = getSharedPreferences(EQ_APP_PREFERENCES, MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean(SORT_TYPE,sortByMagnitude)
+        editor.apply()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu,menu)
         return true
@@ -73,10 +85,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val itemId = item.itemId
-        when(itemId){
-            R.id.main_menu_sort_time -> viewModel.reloadEarthquakesByDatabase(false )
-            R.id.main_menu_sort_magnitude -> viewModel.reloadEarthquakesByDatabase(true)
+        if(itemId == R.id.main_menu_sort_magnitude){
+            viewModel.reloadEarthquakesByDatabase(true)
+            saveSortType(true)
+        }else if(itemId == R.id.main_menu_sort_time){
+            viewModel.reloadEarthquakesByDatabase(false )
+            saveSortType(false)
+
+
         }
+
         return super.onOptionsItemSelected(item)
     }
 }
