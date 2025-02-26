@@ -3,6 +3,7 @@ package com.example.earthquake_app.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.earthquake_app.DetailActivity
 import com.example.earthquake_app.Earthquake
 import com.example.earthquake_app.R
 import com.example.earthquake_app.api.ApiResponseStatus
+import com.example.earthquake_app.api.WorkerUtil
 import com.example.earthquake_app.databinding.ActivityMainBinding
 
 
@@ -20,18 +22,22 @@ class MainActivity : AppCompatActivity() {
     companion object{
         const val SORT_TYPE = "sort_type"
         const val EQ_APP_PREFERENCES = "earthquake_preferences"
+
     }
     private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        WorkerUtil.scheduleSync(this)
+
         val eqRecycler = binding.eqRecycler
         eqRecycler.layoutManager = LinearLayoutManager(this)
 
         val adapter = EqAdapter()
         eqRecycler.adapter = adapter
-        val prefs = getPreferences(MODE_PRIVATE).getBoolean(SORT_TYPE,false)
+        val prefs = this.getPreferences(MODE_PRIVATE).getBoolean(SORT_TYPE,false)
+        Log.d("fetch preferences", prefs.toString())
         viewModel = ViewModelProvider(this, MainViewModelFactory(application, prefs))[MainViewModel::class.java]
 
         viewModel.eqList.observe(this) { eqList ->
@@ -72,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveSortType(sortByMagnitude:Boolean){
-        val prefs = getSharedPreferences(EQ_APP_PREFERENCES, MODE_PRIVATE)
+        val prefs = this.getSharedPreferences(EQ_APP_PREFERENCES, MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putBoolean(SORT_TYPE,sortByMagnitude)
         editor.apply()
@@ -88,10 +94,12 @@ class MainActivity : AppCompatActivity() {
         if(itemId == R.id.main_menu_sort_magnitude){
             viewModel.reloadEarthquakesByDatabase(true)
             saveSortType(true)
+            Log.d("Saved prefs", "true")
+
         }else if(itemId == R.id.main_menu_sort_time){
             viewModel.reloadEarthquakesByDatabase(false )
             saveSortType(false)
-
+            Log.d("Saved prefs", "false")
 
         }
 

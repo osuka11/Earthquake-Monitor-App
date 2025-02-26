@@ -15,7 +15,7 @@ import java.net.UnknownHostException
 
 private val TAG = MainViewModel::class.java.simpleName
 
-class MainViewModel(application: Application, sortType:Boolean):AndroidViewModel(application) {
+class MainViewModel(application: Application, private val sortType:Boolean):AndroidViewModel(application) {
 
 
 
@@ -37,14 +37,14 @@ class MainViewModel(application: Application, sortType:Boolean):AndroidViewModel
 
 
     init {
-        reloadEarthquakes(sortType)
+        reloadEarthquakesByDatabase(sortType)
     }
 
-    private fun reloadEarthquakes(sortByMagnitude: Boolean) {
+    private fun reloadEarthquakes() {
         viewModelScope.launch {
             try {
                 _status.value = ApiResponseStatus.LOADING
-                _eqList.value = repository.fetchEarthquakes(sortByMagnitude)
+                _eqList.value = repository.fetchEarthquakes(sortType)
                 _status.value = ApiResponseStatus.DONE
 
             }catch (error:UnknownHostException){
@@ -56,16 +56,10 @@ class MainViewModel(application: Application, sortType:Boolean):AndroidViewModel
     }
     fun reloadEarthquakesByDatabase(sortByMagnitude: Boolean){
         viewModelScope.launch {
-            try {
-                _eqList.value = repository.getEarthquakesbyDataBase(sortByMagnitude)
-               // _eqList.value!!.sortByDescending { it.magnitude }
-
-            }catch (error:UnknownHostException){
-                _status.value = ApiResponseStatus.ERROR
-                Log.d(TAG, "No internet Connection")
+            _eqList.value = repository.getEarthquakesbyDataBase(sortByMagnitude)
+            if(_eqList.value!!.isEmpty()){
+                reloadEarthquakes()
             }
-
         }
-
     }
 }

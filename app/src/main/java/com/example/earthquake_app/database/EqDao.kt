@@ -14,6 +14,6 @@ interface EqDao {
     @Query("SELECT * FROM earthquakes")
     fun getAllEarthquake():MutableList<Earthquake>
 
-    @Query("SELECT * FROM earthquakes ORDER BY magnitude ASC")
+    @Query("SELECT * FROM earthquakes ORDER BY magnitude DESC")
     fun getEarthquakesByMagnitude():MutableList<Earthquake>
 }
